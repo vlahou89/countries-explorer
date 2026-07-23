@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #4A5878;
+  --color-primary-dark: 14 15 65;
+  --color-line: #D8DAE2;
+  --color-shade: #F2F2F2;
+  --color-faint: #9AA0AE;
+  --color-chip: #E4F2F6;
+  --color-button: #4F7294;
+  --color-lightgrey: #BDBDBD;
+
+  --shadow-bottom: 0 2px 0px 0 rgb(0 0 0 / 0.1);
+}
+
+@layer base {
+  html {
+    @apply bg-white font-sans text-black antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

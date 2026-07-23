@@ -1,0 +1,49 @@
+{
+  "name": "countries-exp",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "vitest run",
+    "typecheck": "nuxt typecheck",
+    "lint:a11y": "eslint app --ext .vue",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.11.2",
+    "leaflet": "^1.9.4",
+    "nuxt": "^3.21.9",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.40"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@storybook/addon-a11y": "^10.5.3",
+    "@storybook/vue3-vite": "^10.5.3",
+    "@types/leaflet": "^1.9.21",
+    "@typescript-eslint/parser": "^8.65.0",
+    "@vitejs/plugin-vue": "^6.0.8",
+    "@vue/test-utils": "^2.4.11",
+    "autoprefixer": "^10.5.4",
+    "eslint": "^10.7.0",
+    "eslint-plugin-vuejs-accessibility": "^2.5.0",
+    "happy-dom": "^20.11.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.1.1",
+    "storybook": "^10.5.3",
+    "tailwindcss": "^3.4.19",
+    "vite-svg-loader": "^5.1.1",
+    "vitest": "^4.1.10",
+    "vue-eslint-parser": "^10.4.1",
+    "vue-tsc": "^3.3.8"
+  },
+  "lint-staged": {
+    "*.vue": "eslint"
+  }
+}
