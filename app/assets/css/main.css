@@ -27,3 +27,260 @@
     }
   }
 }
+
+@layer components {
+  /* Page layout */
+  .page {
+    @apply mx-auto max-w-[1100px] px-4 py-8 font-[system-ui,sans-serif];
+  }
+  .page-title {
+    @apply text-[48px] font-bold leading-[1.2] tracking-normal text-black;
+  }
+  .page-divider {
+    @apply mb-4 border-line;
+  }
+
+  /* Feedback states */
+  .error-banner {
+    @apply mt-6 rounded-md border border-red-700 bg-red-50 p-4;
+  }
+  .error-banner-action {
+    @apply mt-3;
+  }
+  .empty-state {
+    @apply mt-4 text-black/60;
+  }
+
+  /* Filters */
+  .filters-section {
+    @apply mt-6;
+  }
+  .filters-section--narrow {
+    @apply mt-10 max-w-xl;
+  }
+  .filters-heading {
+    @apply mb-3 text-2xl font-bold text-black;
+  }
+  .filters-row {
+    @apply flex items-center gap-3;
+  }
+  .filters-row--align-end {
+    @apply flex items-end gap-3;
+  }
+  .filters-row-hint {
+    @apply text-sm text-black/70;
+  }
+
+  /* Chips */
+  .chip-list {
+    @apply mt-3 flex list-none flex-wrap gap-2;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-chip py-1 pl-3 pr-1.5 text-sm text-black;
+  }
+  .chip-key {
+    @apply font-bold;
+  }
+  .chip-remove {
+    @apply flex h-5 w-5 items-center justify-center rounded-full text-black/60 outline-none
+           hover:bg-white/70 focus-visible:ring-2 focus-visible:ring-primary-dark/30;
+  }
+
+  /* Button */
+  .btn {
+    @apply inline-flex h-[30px] shrink-0 items-center gap-1 rounded-lg px-3 text-sm font-medium outline-none
+           transition-colors focus-visible:ring-2 focus-visible:ring-primary-dark/30
+           disabled:cursor-not-allowed disabled:opacity-70;
+  }
+  .btn--primary {
+    @apply bg-button text-white hover:bg-primary-dark;
+  }
+  .btn--secondary {
+    @apply bg-shade text-black/70 hover:bg-line;
+  }
+  .btn--outline {
+    @apply border border-lightgrey bg-white text-black shadow-bottom hover:bg-shade;
+  }
+  .btn-icon {
+    @apply shrink-0;
+  }
+
+  /* Input */
+  .field {
+    @apply flex flex-col gap-1;
+  }
+  .field--sm {
+    @apply w-[124px];
+  }
+  .field--md {
+    @apply w-[192px];
+  }
+  .field-label {
+    @apply text-base text-black;
+  }
+  .field-shell {
+    @apply relative flex h-[30px] items-center rounded-lg border border-primary-dark bg-white
+           focus-within:ring-2 focus-within:ring-primary-dark/30;
+  }
+  .field-icon {
+    @apply pointer-events-none absolute left-3;
+  }
+  .field-input {
+    @apply w-full bg-transparent text-sm text-black outline-none disabled:opacity-50;
+  }
+  .field-input--search {
+    @apply pl-9 placeholder:text-black;
+  }
+  .field-input--plain {
+    @apply pl-3 placeholder:text-faint;
+  }
+
+  /* Select */
+  .select {
+    @apply relative flex flex-col gap-1;
+  }
+  .select-trigger {
+    @apply flex h-[30px] w-[124px] items-center gap-2 rounded-lg border border-primary-dark bg-white px-2
+           text-left text-sm outline-none focus:ring-2 focus:ring-primary-dark/30 disabled:opacity-50;
+  }
+  .select-value {
+    @apply flex-1 truncate;
+  }
+  .select-list {
+    @apply absolute top-full z-10 mt-1 w-full overflow-auto rounded-lg border border-primary-dark
+           bg-white py-1 text-sm shadow-lg;
+  }
+  .select-option {
+    @apply cursor-pointer px-3 py-2;
+  }
+  .select-option--active {
+    @apply bg-shade;
+  }
+
+  /* Table */
+  .countries-table-card {
+    @apply max-w-[1139px] rounded-xl shadow-bottom;
+  }
+  .countries-table {
+    @apply w-full table-fixed border-separate border-spacing-0 text-left text-sm;
+  }
+  .countries-table-head-cell {
+    @apply px-2 py-[7px] font-bold text-black sm:px-4;
+  }
+  .countries-table-sort-btn {
+    @apply inline-flex max-w-full items-center gap-0.5 rounded outline-none
+           focus-visible:ring-2 focus-visible:ring-primary-dark/30 sm:gap-1;
+  }
+  .countries-table-row {
+    @apply odd:bg-shade;
+  }
+  .countries-table-cell {
+    @apply truncate px-2 py-[7px] text-black sm:px-4;
+  }
+  .countries-table-cell--actions {
+    @apply px-2 py-[7px] text-right;
+  }
+  .skeleton-bar {
+    @apply block h-4 w-3/4 animate-pulse rounded bg-line;
+  }
+
+  /* Pagination */
+  .pagination {
+    @apply flex items-center justify-center gap-1;
+  }
+  .pagination-btn {
+    @apply flex h-8 min-w-8 items-center justify-center rounded-md px-2 outline-none
+           hover:bg-shade disabled:cursor-not-allowed disabled:opacity-40
+           focus-visible:ring-2 focus-visible:ring-primary-dark/30;
+  }
+  .pagination-btn--number {
+    @apply flex h-8 min-w-8 items-center justify-center rounded-md px-2 text-sm outline-none
+           focus-visible:ring-2 focus-visible:ring-primary-dark/30;
+  }
+  .pagination-btn--active {
+    @apply bg-button text-white;
+  }
+  .pagination-btn--inactive {
+    @apply text-black hover:bg-shade;
+  }
+
+  /* Country detail */
+  .back-link {
+    @apply inline-flex items-center gap-1 text-sm text-black/70 hover:text-black;
+  }
+  .hero {
+    @apply mt-4 flex flex-col items-start gap-4 rounded-xl bg-gradient-to-r from-primary to-primary-dark
+           p-6 text-white sm:flex-row sm:items-center sm:justify-between sm:gap-6;
+  }
+  .hero-identity {
+    @apply flex items-center gap-4;
+  }
+  .hero-flag {
+    @apply h-16 w-24 rounded border border-white/20 object-cover;
+  }
+  .hero-name {
+    @apply text-3xl font-black;
+  }
+  .hero-official {
+    @apply text-white/70;
+  }
+  .hero-clock {
+    @apply shrink-0 sm:text-right;
+  }
+  .hero-clock-time {
+    @apply text-3xl font-bold tabular-nums;
+  }
+  .hero-clock-label {
+    @apply text-sm text-white/70;
+  }
+  .stats-grid {
+    @apply mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4;
+  }
+  .stat-card {
+    @apply rounded-xl bg-shade p-4;
+  }
+  .stat-label {
+    @apply text-xs font-medium uppercase tracking-wide text-faint;
+  }
+  .stat-value {
+    @apply mt-1 text-base font-semibold text-black;
+  }
+  .map-section {
+    @apply mt-8;
+  }
+  .map-section-header {
+    @apply mb-2 flex items-center justify-between;
+  }
+  .map-section-title {
+    @apply text-lg font-bold text-black;
+  }
+  .map-link {
+    @apply text-sm text-primary hover:underline;
+  }
+  .map-frame {
+    @apply h-96 w-full rounded-lg border border-line;
+  }
+
+  /* Country detail skeleton */
+  .skeleton-flag {
+    @apply h-16 w-24 animate-pulse rounded border border-white/20 bg-white/25;
+  }
+  .skeleton-hero-name {
+    @apply h-8 w-48 animate-pulse rounded bg-white/25;
+  }
+  .skeleton-hero-official {
+    @apply mt-2 h-4 w-32 animate-pulse rounded bg-white/25;
+  }
+  .skeleton-clock-time {
+    @apply h-8 w-24 animate-pulse rounded bg-white/25 sm:ml-auto;
+  }
+  .skeleton-clock-label {
+    @apply mt-2 h-4 w-28 animate-pulse rounded bg-white/25 sm:ml-auto;
+  }
+  .skeleton-stat-value {
+    @apply inline-block h-5 w-3/4 animate-pulse rounded bg-line;
+  }
+  .skeleton-map {
+    @apply animate-pulse bg-line;
+  }
+}
