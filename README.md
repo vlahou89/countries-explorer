@@ -3,6 +3,7 @@
 ![Storybook](image-1.png)
 ![Tests](image-2.png)
 ![alt text](image-3.png)
+![alt text](image-4.png)
 
 ## Stack
 
@@ -39,3 +40,6 @@ Requires a `.env` file with:
 ```
 NUXT_REST_COUNTRIES_API_KEY=your_key_here
 ```
+## Hours spent
+
+Apprx 4h
