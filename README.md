@@ -23,7 +23,19 @@ Tailwind utilities, composed into component classes (`.hero`, `.btn`, `.stat-car
 
 ## Accessibility
 
-`eslint-plugin-vuejs-accessibility` lints on save, `@storybook/addon-a11y` checks each story visually, and `vitest-axe` asserts zero violations per component in the test suite — three layers, so a regression has to slip past all of them.
+Three automated layers, so a regression has to slip past all of them to ship:
+
+- **`eslint-plugin-vuejs-accessibility`** lints every `.vue` file on save (`npm run lint:a11y`) — catches missing labels, invalid ARIA, and similar structural issues before the code even runs.
+- **`@storybook/addon-a11y`** runs axe-core against each component's rendered story, so visual issues (contrast, focus order) surface while building the component in isolation.
+- **`vitest-axe`** asserts zero violations per component in the Vitest suite itself, so a11y regressions fail `npm run test` in CI, not just a manual check.
+
+Plus manual patterns used throughout the app:
+
+- **`BaseSelect`** implements the ARIA combobox "virtual focus" pattern — real DOM focus stays on the trigger button; `aria-activedescendant` tells assistive tech which option is active, with full arrow-key/Enter/Escape support.
+- **Labels are always present**, even when hidden visually — `hide-label` on `BaseInput`/`BaseSelect` moves the label to `sr-only` rather than removing it.
+- **Loading states are announced**: `CountriesTable` sets `aria-busy` + a `sr-only` caption while loading; the country detail skeleton uses `role="status"`.
+- **Focus is always visible** — every interactive element uses `focus-visible:ring-2`, never relying on color alone.
+- **`prefers-reduced-motion`** is respected globally (`main.css`), collapsing animations/transitions to near-zero duration.
 
 ## Running locally
 
