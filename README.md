@@ -55,3 +55,8 @@ NUXT_REST_COUNTRIES_API_KEY=your_key_here
 ## Hours spent
 
 Apprx 4h
+
+## Trade off
+
+My goal was to include as many tests and accessibility checks I could and to include storybook so most of my time went there. For that reason the visual part is not 100% on point  with spacing, border radius etc. I trid to bring it as closes as possible to the figma but I wanted to include everything that would be important to me to be added in, in a real life role as well and accessibiity checks and storybook would be equally important. 
+
