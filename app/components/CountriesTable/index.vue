@@ -6,6 +6,7 @@ import IconChevron from '~/assets/icons/chevron-down.svg'
 export type SortKey = 'name' | 'currency' | 'region' | 'population'
 export type SortDirection = 'asc' | 'desc'
 
+// One row per country, plus a loading skeleton and a sort toggle per column.
 const props = withDefaults(defineProps<{
   countries: CountrySummary[]
   loading?: boolean
@@ -13,7 +14,6 @@ const props = withDefaults(defineProps<{
   sortDirection?: SortDirection
   pageSize?: number
 }>(), { loading: false, sortKey: null, sortDirection: 'asc', pageSize: 9 })
-
 const emit = defineEmits<{ sort: [SortKey] }>()
 
 const COLUMNS: { key: SortKey; label: string }[] = [
@@ -23,11 +23,13 @@ const COLUMNS: { key: SortKey; label: string }[] = [
   { key: 'population', label: 'Population' },
 ]
 
+// aria-sort tells assistive tech which column is active, and in which direction.
 function ariaSort(key: SortKey): 'none' | 'ascending' | 'descending' {
   if (props.sortKey !== key) return 'none'
   return props.sortDirection === 'asc' ? 'ascending' : 'descending'
 }
 
+// Per-cell border classes fake a rounded outer border on a <table>, since border-separate can't round itself.
 function edgeClass(rowIndex: number, rowCount: number, col: 'first' | 'middle' | 'last'): string {
   const isFirstRow = rowIndex === 0
   const isLastRow = rowIndex === rowCount - 1

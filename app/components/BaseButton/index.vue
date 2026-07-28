@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Visual variant just picks which btn--* class is active; the template does the rest.
 withDefaults(defineProps<{
   variant?: 'primary' | 'secondary' | 'outline'
   type?: 'button' | 'submit' | 'reset'

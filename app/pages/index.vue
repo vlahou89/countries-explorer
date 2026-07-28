@@ -11,6 +11,7 @@ import { useCountriesStore, type FilterKey } from '~/stores/countries'
 import IconPlus from '~/assets/icons/plus.svg'
 import IconClose from '~/assets/icons/close.svg'
 
+// storeToRefs keeps every field reactive when destructured, unlike destructuring the store directly.
 const store = useCountriesStore()
 const {
   countries,
@@ -29,17 +30,24 @@ const {
   pageSize,
 } = storeToRefs(store)
 
+// Fetches once per page load rather than on every re-render.
 await callOnce('countries', () => store.fetchCountries())
 
+// Select options
 const FILTER_KEY_OPTIONS: { label: string; value: FilterKey }[] = [
   { label: 'Name', value: 'name' },
   { label: 'Currency', value: 'currency' },
   { label: 'Region', value: 'region' },
   { label: 'Language', value: 'language' },
 ]
+// They hold the in=progress state of the "include" filter inputs, 
+// which are only added to the store when the user clicks "Add".  
 const filterKey = ref<FilterKey | null>(null)
 const filterValue = ref<string | null>(null)
 
+// Add the chip, then clear the inputs ready for the next one.
+// Once "Add" is clicked, addFilter() reads both values and 
+// pushes a real chip into the store's appliedFilters array 
 function addFilter() {
   if (!filterKey.value || !filterValue.value) return
   const keyLabel = FILTER_KEY_OPTIONS.find(o => o.value === filterKey.value)!.label
@@ -56,6 +64,7 @@ useHead({ title: 'Countries list' })
     <h1 class="page-title">Countries list</h1>
     <hr class="page-divider">
 
+    <!-- Population Filters -->
     <section class="filters-section">
       <h2 class="filters-heading">Population</h2>
       <div class="filters-row">
@@ -65,6 +74,7 @@ useHead({ title: 'Countries list' })
       </div>
     </section>
 
+    <!-- Include filters -->
     <section class="filters-section--narrow">
       <h2 class="filters-heading">Include</h2>
       <div class="filters-row--align-end">
@@ -102,7 +112,14 @@ useHead({ title: 'Countries list' })
       </ul>
     </section>
 
-    <BaseInput v-model="search" size="md" class="mt-16" label="Search" hide-label placeholder="Search" variant="search" />
+    <BaseInput 
+          v-model="search" 
+          size="md" class="mt-16"  
+          label="Search" 
+          hide-label 
+          placeholder="Search" 
+          variant="search" 
+    />
 
     <ApiErrorBanner v-if="error && !pending" :error="error" @retry="store.fetchCountries" />
 

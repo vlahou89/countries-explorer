@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, useId } from 'vue'
 import IconSearch from '~/assets/icons/search.svg'
 import IconChevron from '~/assets/icons/chevron-down.svg'
 
+// A custom <select>: a button that toggles a listbox, built to the ARIA combobox pattern (see template).
 const props = withDefaults(defineProps<{
   modelValue: T | null
   options: { label: string; value: T }[]
@@ -11,7 +12,6 @@ const props = withDefaults(defineProps<{
   hideLabel?: boolean
   disabled?: boolean
 }>(), { placeholder: 'Select', hideLabel: false, disabled: false })
-
 const emit = defineEmits<{ 'update:modelValue': [T | null] }>()
 
 const root = ref<HTMLElement | null>(null)
@@ -20,48 +20,36 @@ const activeIndex = ref(-1)
 const listboxId = useId()
 const labelId = useId()
 
+// Visible label, and which option assistive tech should treat as "focused" while the list is open.
 const selectedLabel = computed(() => props.options.find(o => o.value === props.modelValue)?.label ?? null)
 const activeOptionId = computed(() => (open.value && activeIndex.value >= 0) ? `${listboxId}-${activeIndex.value}` : undefined)
 
-function openList() {
-  if (props.disabled) return
-  open.value = true
-  activeIndex.value = Math.max(0, props.options.findIndex(o => o.value === props.modelValue))
+// One setter for both open and close: opening highlights the current value, closing clears the highlight.
+function setOpen(value: boolean) {
+  if (value && props.disabled) return
+  open.value = value
+  activeIndex.value = value ? Math.max(0, props.options.findIndex(o => o.value === props.modelValue)) : -1
 }
+function toggle() { setOpen(!open.value) }
+function select(option: { label: string; value: T }) { emit('update:modelValue', option.value); setOpen(false) }
 
-function closeList() {
-  open.value = false
-  activeIndex.value = -1
-}
-
-function toggle() {
-  open.value ? closeList() : openList()
-}
-
-function select(option: { label: string; value: T }) {
-  emit('update:modelValue', option.value)
-  closeList()
-}
-
+// Arrow keys move the highlight, Enter selects it, Escape/Tab close the list.
+const OPENING_KEYS = ['ArrowDown', 'ArrowUp', 'Enter', ' ']
 function onButtonKeydown(e: KeyboardEvent) {
-  if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) e.preventDefault()
+  if (OPENING_KEYS.includes(e.key)) e.preventDefault()
+  if (!open.value) { if (OPENING_KEYS.includes(e.key)) setOpen(true); return }
 
-  if (!open.value) {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') openList()
-    return
-  }
-
+  const active = props.options[activeIndex.value]
   if (e.key === 'ArrowDown') activeIndex.value = Math.min(activeIndex.value + 1, props.options.length - 1)
   else if (e.key === 'ArrowUp') activeIndex.value = Math.max(activeIndex.value - 1, 0)
-  else if (e.key === 'Enter') { const o = props.options[activeIndex.value]; if (o) select(o) }
-  else if (e.key === 'Escape') closeList()
-  else if (e.key === 'Tab') closeList()
+  else if (e.key === 'Enter' && active) select(active)
+  else if (e.key === 'Escape' || e.key === 'Tab') setOpen(false)
 }
 
+// Click anywhere outside the component to close the list.
 function onClickOutside(e: MouseEvent) {
-  if (open.value && root.value && !root.value.contains(e.target as Node)) closeList()
+  if (open.value && root.value && !root.value.contains(e.target as Node)) setOpen(false)
 }
-
 onMounted(() => document.addEventListener('mousedown', onClickOutside))
 onBeforeUnmount(() => document.removeEventListener('mousedown', onClickOutside))
 </script>

@@ -2,6 +2,7 @@
 import type { ApiError } from '~/services/api'
 import BaseButton from '~/components/BaseButton/index.vue'
 
+// Displays whatever ApiError the store/service surfaced; the parent wires up what "retry" does.
 defineProps<{ error: ApiError }>()
 defineEmits<{ retry: [] }>()
 </script>

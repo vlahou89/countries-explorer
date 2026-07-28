@@ -1,3 +1,4 @@
+// A typed, user-facing error: `kind` drives which message/retry UI is shown, `status` is the raw HTTP code.
 type ApiErrorKind = 'network' | 'timeout' | 'not-found' | 'server'
 export class ApiError extends Error {
   constructor(
@@ -10,6 +11,7 @@ export class ApiError extends Error {
   }
 }
 
+// Fetch with a timeout and one retry, translating whatever $fetch throws into an ApiError by status code.
 export async function apiGet<T>(path: string, query?: Record<string, string>): Promise<T> {
   try {
     return await $fetch<T>(path, { query, timeout: 10_000, retry: 1 }) as T

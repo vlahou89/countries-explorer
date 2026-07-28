@@ -9,23 +9,18 @@ const props = defineProps<{
   page: number
   pageCount: number
 }>()
-
 const emit = defineEmits<{ 'update:page': [number] }>()
-
 const NUMBERS_SHOWN = 5
 
+// Always show page 1 and the last page, plus a 3-page window around the current page.
 const pageNumbers = computed<number[]>(() => {
   const { page, pageCount } = props
   if (pageCount <= NUMBERS_SHOWN) return Array.from({ length: pageCount }, (_, i) => i + 1)
-
-  let raw: number[]
-  if (page === 1) raw = [1, 2, 3, 4, pageCount]
-  else if (page === pageCount) raw = [1, pageCount - 3, pageCount - 2, pageCount - 1, pageCount]
-  else raw = [1, page - 1, page, page + 1, pageCount]
-
-  return [...new Set(raw)].filter(p => p >= 1 && p <= pageCount).sort((a, b) => a - b)
+  const start = Math.min(Math.max(page - 1, 2), pageCount - 3)
+  return [...new Set([1, start, start + 1, start + 2, pageCount])]
 })
 
+// Ignore out-of-range pages and clicking the page you're already on.
 function go(p: number) {
   if (p < 1 || p > props.pageCount || p === props.page) return
   emit('update:page', p)

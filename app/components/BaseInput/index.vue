@@ -2,8 +2,8 @@
 import { useId } from 'vue'
 import IconSearch from '~/assets/icons/search.svg'
 
+// A labelled <input>, optionally with a search icon; emits null (not '') when cleared.
 const inputId = useId()
-
 withDefaults(defineProps<{
   modelValue: string | null
   label: string
@@ -14,12 +14,11 @@ withDefaults(defineProps<{
   type?: 'text' | 'number' | 'email'
   size?: 'sm' | 'md'
 }>(), { placeholder: '', hideLabel: false, disabled: false, variant: 'default', type: 'text', size: 'md' })
-
 const emit = defineEmits<{ 'update:modelValue': [string | null] }>()
 
+// Treat an emptied field as "no value" rather than an empty string.
 function onInput(e: Event) {
-  const value = (e.target as HTMLInputElement).value
-  emit('update:modelValue', value === '' ? null : value)
+  emit('update:modelValue', (e.target as HTMLInputElement).value || null)
 }
 </script>
 

@@ -11,6 +11,7 @@ const STAT_LABELS = [
   'Also known as', 'UN membership', 'Independence', 'Time zone', 'Coordinates',
 ]
 
+// Route param drives the fetch; useAsyncData re-fetches (and re-keys its cache) whenever `id` changes.
 const route = useRoute()
 const id = computed(() => String(route.params.id))
 
@@ -20,31 +21,22 @@ const { data: country, pending, error, refresh } = useAsyncData<CountryDetails, 
   { watch: [id] },
 )
 
-const currenciesLabel = computed(() => {
-  if (!country.value?.currencies.length) return '—'
-  return country.value.currencies.map(c => `${c.symbol ? c.symbol + ' ' : ''}${c.name} (${c.code})`).join(', ')
-})
+// Display-only formatting for the stats grid; each one falls back to an em dash while loading.
+const currenciesLabel = computed(() => country.value?.currencies.map(c => `${c.symbol ? c.symbol + ' ' : ''}${c.name} (${c.code})`).join(', ') || '—')
 const regionLabel = computed(() => [country.value?.region, country.value?.subregion].filter(Boolean).join(' · ') || '—')
 const alsoKnownAs = computed(() => country.value?.nativeNames.join(', ') || country.value?.official || '—')
-const coordinatesLabel = computed(() => {
-  if (!country.value) return '—'
-  const [lat, lng] = country.value.latlng
-  return `${lat.toFixed(2)}, ${lng.toFixed(2)}`
-})
+const coordinatesLabel = computed(() => country.value ? country.value.latlng.map(n => n.toFixed(2)).join(', ') : '—')
 
+// A ticking clock showing the country's local time, derived from its UTC offset.
 const nowMs = ref(Date.now())
 let timer: ReturnType<typeof setInterval> | undefined
 onMounted(() => { timer = setInterval(() => { nowMs.value = Date.now() }, 1000) })
 onBeforeUnmount(() => clearInterval(timer))
-
 const timeFormatter = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', second: '2-digit' })
-const localTime = computed(() => {
-  if (!country.value) return '—'
-  const shifted = new Date(nowMs.value + country.value.utcOffsetMinutes * 60_000)
-  return timeFormatter.format(shifted)
-})
+const localTime = computed(() => country.value ? timeFormatter.format(new Date(nowMs.value + country.value.utcOffsetMinutes * 60_000)) : '—')
 const utcOffsetLabel = computed(() => country.value?.timezones[0] ?? '—')
 
+// A getter, not a plain object, so the title updates once `country` finishes loading.
 useHead(() => ({ title: country.value ? `${country.value.name} — Countries list` : 'Countries list' }))
 </script>
 
