@@ -86,6 +86,8 @@ useHead(() => ({ title: country.value ? `${country.value.name} — Countries lis
           <img
             :src="country.flagSvg"
             :alt="country.flagAlt"
+            width="96"
+            height="64"
             class="hero-flag"
           >
           <div>
