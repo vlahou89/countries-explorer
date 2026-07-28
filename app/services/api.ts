@@ -1,4 +1,5 @@
 // A typed, user-facing error: `kind` drives which message/retry UI is shown, `status` is the raw HTTP code.
+// Normalizes every possible failure.
 type ApiErrorKind = 'network' | 'timeout' | 'not-found' | 'server'
 export class ApiError extends Error {
   constructor(

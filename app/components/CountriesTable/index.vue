@@ -72,8 +72,8 @@ function edgeClass(rowIndex: number, rowCount: number, col: 'first' | 'middle' |
               class="countries-table-sort-btn"
               @click="emit('sort', col.key)"
             >
-              <span aria-hidden="true" class="sm:hidden">{{ col.label.slice(0, 6) }}</span>
-              <span aria-hidden="true" class="hidden sm:inline">{{ col.label }}</span>
+              <span class="sm:hidden">{{ col.label.slice(0, 6) }}</span>
+              <span class="hidden sm:inline">{{ col.label }}</span>
               <IconChevron
                 class="shrink-0 transition-transform"
                 :class="[

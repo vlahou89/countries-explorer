@@ -16,7 +16,7 @@ export const useCountriesStore = defineStore('countries', () => {
   const pending = ref(false)
   const error = ref<ApiError | null>(null)
 
-  // Load pattern: pending on, clear old error, fetch, pending off no matter what (finally).
+  // Load pattern: pending on, clear old error, fetch, pending off no matter what.
   async function fetchCountries() {
     pending.value = true
     error.value = null
@@ -34,6 +34,7 @@ export const useCountriesStore = defineStore('countries', () => {
   const populationLow = ref<string | null>(null)
   const populationHigh = ref<string | null>(null)
   const search = ref<string | null>(null)
+  
   // Chips the user adds one at a time, e.g. "Region: Europe".
   const appliedFilters = ref<AppliedFilter[]>([])
 

@@ -29,7 +29,7 @@ Tailwind utilities, composed into component classes (`.hero`, `.btn`, `.stat-car
 
 Three automated layers, so a regression has to slip past all of them to ship:
 
-- **`eslint-plugin-vuejs-accessibility`** lints every `.vue` file on save (`npm run lint:a11y`) — catches missing labels, invalid ARIA, and similar structural issues before the code even runs.
+- **`eslint-plugin-vuejs-accessibility`** lints every staged `.vue` file via a Husky pre-commit hook (`.husky/pre-commit` → `npx lint-staged`) — catches missing labels, invalid ARIA, and similar structural issues before a commit can land, not just when someone remembers to run `npm run lint:a11y` by hand.
 - **`@storybook/addon-a11y`** runs axe-core against each component's rendered story, so visual issues (contrast, focus order) surface while building the component in isolation.
 - **`vitest-axe`** asserts zero violations per component in the Vitest suite itself, so a11y regressions fail `npm run test` in CI, not just a manual check.
 
@@ -40,6 +40,17 @@ Plus manual patterns used throughout the app:
 - **Loading states are announced**: `CountriesTable` sets `aria-busy` + a `sr-only` caption while loading; the country detail skeleton uses `role="status"`.
 - **Focus is always visible** — every interactive element uses `focus-visible:ring-2`, never relying on color alone.
 - **`prefers-reduced-motion`** is respected globally (`main.css`), collapsing animations/transitions to near-zero duration.
+
+## Performance
+
+- **`response_fields`** trims the REST Countries payload server-side to only the fields the UI uses (`server/utils/restCountries.ts`) — smaller responses, less to parse.
+- **Pagination** renders only 9 rows into the DOM at a time instead of ~250, so there's no need for a virtual-scrolling library to keep the table light.
+- **`computed()`** caches every stage of the filter → sort → paginate pipeline in `stores/countries.ts` — a stage only re-runs when its own inputs actually change.
+- **Leaflet is dynamically imported**, client-only, after mount (`CountryMap`) — code-split out of every page that doesn't show a map, and never runs during SSR.
+- **SSR** means the list page's initial HTML already contains the country data by the time it reaches the browser, instead of shipping an empty shell plus a client-side loading spinner.
+- The hero flag image sets explicit `width`/`height` to match its rendered size, so the browser reserves the right space before it loads and avoids layout shift.
+
+When measuring this with Lighthouse, test against a production build (`npm run build && npm run preview`), not `npm run dev` — dev mode's HMR websocket and unminified bundles tank the Performance score for reasons that don't reflect real usage.
 
 ## Running locally
 
